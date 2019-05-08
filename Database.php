@@ -16,13 +16,12 @@ class Database {
     ];
 
     /**
-     *
      * @param string $odbc     [system defined odbc DSN]
      * @param string $table    [table to update]
      * @param string $user     [optionally required username for db access]
      * @param string $password [optionally required pw for db access]
      */
-    public function __construct(string $odbc, string $table, $user = '', $password = '') {
+    public function __construct(string $odbc, string $table, string $user = '', string $password = '') {
         try {
             $this->pdo   = new PDO('odbc:' . $odbc, $user, $password);
             $this->start = microtime(true);
