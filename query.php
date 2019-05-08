@@ -54,7 +54,7 @@ foreach($database->getNonEOLChips() as $row) {
     $result = [
         str_pad($row['partname'], 20),
         'Total Stock:' . str_pad(number_format($parser->getTotalStock()), 19, ' ', STR_PAD_LEFT),
-        'Available Distributors > 1000: ' . str_pad(number_format($amountDistributorsWithStock), 10, ' ', STR_PAD_LEFT),
+        'Available Distributors > ' . Parser::$STOCK_SIZE_THRESHOLD . ': ' . str_pad(number_format($amountDistributorsWithStock), 10, ' ', STR_PAD_LEFT),
         'EOL: ' . ($setToEOL ? 'yes' : 'no'),
     ];
 

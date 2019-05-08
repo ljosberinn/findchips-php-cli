@@ -73,7 +73,7 @@ class Database {
         $stmt = $this->pdo->query(str_replace('%TABLENAME%', $table, self::QUERIES['verifyTableExists']));
 
         if($stmt->rowCount() === 0) {
-            die('Connection established, but couldn\'t find table "' . $table . '"');
+            die('Connection established, but couldn\'t find a table named "' . $table . '"');
         }
 
         $this->table = $table;

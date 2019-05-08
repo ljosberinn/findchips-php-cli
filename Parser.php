@@ -3,7 +3,7 @@
 class Parser {
 
     private const URI = 'https://www.findchips.com/search/';
-    private const STOCK_SIZE_THRESHOLD = 1000;
+    static $STOCK_SIZE_THRESHOLD = 1000;
     private const DISTRIBUTOR_RESULTS_CLASS = 'distributor-results';
     private const INSTOCK_DATASET = 'data-instock';
 
@@ -48,7 +48,7 @@ class Parser {
         foreach($distributors as $div) {
             $currentStock = $this->countStock($div);
 
-            if($currentStock > self::STOCK_SIZE_THRESHOLD) {
+            if($currentStock > self::$STOCK_SIZE_THRESHOLD) {
                 ++$amountDistributorsWithStock;
             }
 
