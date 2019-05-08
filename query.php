@@ -42,6 +42,18 @@ require_once 'Parser.php';
 $database = new Database($sanitizedArgs['odbc'], $sanitizedArgs['table']);
 $parser   = new Parser();
 
+$columns = [
+    str_pad('Chip', 20, ' ', STR_PAD_BOTH),
+    str_pad('Total Stock', 20, ' ', STR_PAD_BOTH),
+    'Available Distributors > ' . Parser::$STOCK_SIZE_THRESHOLD,
+    'EOL',
+];
+
+$stringThresholdLength = strlen((string) Parser::$STOCK_SIZE_THRESHOLD);
+
+$head = implode(' | ', $columns) . "\r\n";
+echo $head . str_pad('', strlen($head), '-') . "\r\n";
+
 foreach($database->getNonEOLChips() as $row) {
     $html                        = $parser->get($row['partname']);
     $amountDistributorsWithStock = $parser->parse($html);
@@ -51,14 +63,12 @@ foreach($database->getNonEOLChips() as $row) {
         $setToEOL = $database->setToEOL((int) $row['id']);
     }
 
-    $result = [
-        str_pad($row['partname'], 20),
-        'Total Stock:' . str_pad(number_format($parser->getTotalStock()), 19, ' ', STR_PAD_LEFT),
-        'Available Distributors > ' . Parser::$STOCK_SIZE_THRESHOLD . ': ' . str_pad(number_format($amountDistributorsWithStock), 10, ' ', STR_PAD_LEFT),
-        'EOL: ' . ($setToEOL ? 'yes' : 'no'),
-    ];
-
-    echo implode(' | ', $result) . "\r\n";
+    echo implode(' | ', [
+            str_pad($row['partname'], 20),
+            str_pad(number_format($parser->getTotalStock()), 20, ' ', STR_PAD_LEFT),
+            str_pad(number_format($amountDistributorsWithStock), 25 + $stringThresholdLength, ' ', STR_PAD_LEFT),
+            $setToEOL ? 'yes' : 'no',
+        ]) . "\r\n";
 }
 
 $database->logExecutionTime();
