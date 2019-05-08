@@ -30,6 +30,7 @@ cd findchips-php-cli
 There should be plenty of errors to validate against whether you've done everything correctly.
 
 Expected result for a sample set:
+
 ![image](example-result.png)
 
 # Customization
