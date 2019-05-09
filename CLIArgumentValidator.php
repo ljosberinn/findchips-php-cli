@@ -34,9 +34,8 @@ class CLIArgumentValidator {
      * @throws Error
      */
     public function validate(): array {
-
         if($this->givenArgumentAmount < $this->requiredArgumentAmount) {
-            throw new Error('Arguments missing, got ' . $this->givenArgumentAmount . ', but requried are: ' . implode(', ', $this->requiredArguments));
+            die('Arguments missing, got ' . $this->givenArgumentAmount . ', but required are: ' . implode(', ', $this->requiredArguments));
         }
 
         $sanitizedArguments = [];
@@ -51,12 +50,12 @@ class CLIArgumentValidator {
 
         foreach($this->requiredArguments as $argument) {
             if(!array_key_exists($argument, $this->requiredArguments)) {
-                throw new Error('Argument missing: ' . $argument);
+                die('Required argument missing: ' . $argument);
             }
         }
 
         if(!file_exists($sanitizedArguments['dbPath'])) {
-            throw new Error('Access database not found under ' . $sanitizedArguments['dbPath']);
+            die('Access database not found under ' . $sanitizedArguments['dbPath']);
         }
 
         return $sanitizedArguments;
@@ -68,7 +67,7 @@ class CLIArgumentValidator {
 
     private function setGivenArgumentAmount(): int {
         // first argument provided is the script itself
-        return count($_SERVER['argc']) - 1;
+        return $_SERVER['argc'] - 1;
     }
 
 
