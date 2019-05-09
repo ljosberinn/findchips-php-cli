@@ -3,14 +3,13 @@
 class Parser {
 
     private const URI = 'https://www.findchips.com/search/';
-    static $STOCK_SIZE_THRESHOLD = 1000;
     private const DISTRIBUTOR_RESULTS_CLASS = 'distributor-results';
     private const INSTOCK_DATASET = 'data-instock';
 
+    public static $STOCK_SIZE_THRESHOLD = 1000;
+
     /* @var DOMDocument $DOM */
     private $DOM;
-    /* @var int $totalStock */
-    private $totalStock;
 
     public function __construct() {
         $this->DOM = new DOMDocument();
@@ -31,19 +30,18 @@ class Parser {
      *
      * @param string $html
      *
-     * @return int
+     * @return array
      */
-    public function parse(string $html): int {
+    public function parse(string $html): array {
         $this->DOM->loadHTML($html);
 
         $distributors = $this->extractDistributors();
 
-        if(count($distributors) === 0) {
-            return 0;
-        }
+        $totalStock = $amountDistributorsWithStock = 0;
 
-        $this->totalStock            = 0;
-        $amountDistributorsWithStock = 0;
+        if(count($distributors) === 0) {
+            return [$amountDistributorsWithStock, $totalStock];
+        }
 
         foreach($distributors as $div) {
             $currentStock = $this->countStock($div);
@@ -52,14 +50,10 @@ class Parser {
                 ++$amountDistributorsWithStock;
             }
 
-            $this->totalStock += $currentStock;
+            $totalStock += $currentStock;
         }
 
-        return $amountDistributorsWithStock;
-    }
-
-    public function getTotalStock(): int {
-        return $this->totalStock;
+        return [$amountDistributorsWithStock, $totalStock];
     }
 
     /**
