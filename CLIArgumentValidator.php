@@ -34,7 +34,7 @@ class CLIArgumentValidator {
      * @throws Error
      */
     public function validate(): array {
-        if($this->givenArgumentAmount < $this->requiredArgumentAmount) {
+        if($this->isMissingArguments()) {
             die('Arguments missing, got ' . $this->givenArgumentAmount . ', but required are: ' . implode(', ', $this->requiredArguments));
         }
 
@@ -59,6 +59,10 @@ class CLIArgumentValidator {
         }
 
         return $sanitizedArguments;
+    }
+
+    private function isMissingArguments(): bool {
+        return $this->givenArgumentAmount < $this->requiredArgumentAmount;
     }
 
     private function setGivenArguments(): array {
