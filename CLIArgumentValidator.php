@@ -49,7 +49,7 @@ class CLIArgumentValidator {
         }
 
         foreach($this->requiredArguments as $argument) {
-            if(!array_key_exists($argument, $this->requiredArguments)) {
+            if(!array_key_exists($argument, $sanitizedArguments)) {
                 die('Required argument missing: ' . $argument);
             }
         }
